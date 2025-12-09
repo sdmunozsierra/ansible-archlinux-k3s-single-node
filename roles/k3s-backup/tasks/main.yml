@@ -1,0 +1,23 @@
+---
+- name: Check for sqlite DB
+  stat:
+    path: /var/lib/rancher/k3s/server/db/state.db
+  register: sqlite_file
+
+- name: Fail if sqlite DB is missing
+  fail:
+    msg: "SQLite DB not found at /var/lib/rancher/k3s/server/db/state.db"
+  when: not sqlite_file.stat.exists
+
+- name: Create backup directory structure
+  file:
+    path: "{{ backup_target }}/sqlite"
+    state: directory
+    mode: '0755'
+  run_once: true
+
+- name: Copy sqlite DB
+  copy:
+    src: /var/lib/rancher/k3s/server/db/state.db
+    dest: "{{ backup_target }}/sqlite/state.db"
+    remote_src: true

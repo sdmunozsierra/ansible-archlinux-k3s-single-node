@@ -1,0 +1,11 @@
+---
+# Where to store backups of the k3s sqlite DB
+backup_target: /home/arch/k3s-backups
+
+# Single-node default: use sqlite (k3s default)
+use_etcd: false  # set true only if you later switch to external etcd
+
+# Basic settings for Arch-based node
+k3s_service_name: k3s
+k3s_packages:
+  - iptables

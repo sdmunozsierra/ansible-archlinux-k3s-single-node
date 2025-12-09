@@ -1,0 +1,19 @@
+---
+- name: Ensure dependencies are present (Arch)
+  pacman:
+    name: "{{ k3s_packages }}"
+    state: present
+  when: ansible_os_family == 'Archlinux'
+
+# You can swap this to kewlfft.aur.aur if you prefer
+- name: Install k3s-bin via yay (AUR)
+  shell: yay -S --noconfirm --needed k3s-bin
+  args:
+    creates: /usr/bin/k3s
+
+- name: Enable and start K3s server
+  systemd:
+    name: "{{ k3s_service_name }}"
+    enabled: true
+    state: started
+    daemon_reload: true
