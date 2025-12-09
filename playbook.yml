@@ -1,0 +1,10 @@
+---
+- name: Deploy single-node K3s
+  hosts: k3s
+  become: true
+  gather_facts: true
+
+  roles:
+    - k3s-single
+    - role: k3s-backup
+      when: not use_etcd
